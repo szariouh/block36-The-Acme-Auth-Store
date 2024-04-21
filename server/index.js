@@ -21,6 +21,16 @@ app.get('/', (req, res)=> res.sendFile(path.join(__dirname, '../client/dist/inde
 app.use('/assets', express.static(path.join(__dirname, '../client/dist/assets'))); 
 
 
+const isLoggedIn = async(req, res, next)=> {
+  try {
+    req.user = await findUserWithToken(req.headers.authorization);
+    next();
+  }
+  catch(ex){
+    next(ex);
+  }
+};
+
 app.post('/api/auth/login', async(req, res, next)=> {
   try {
     res.send(await authenticate(req.body));
@@ -30,14 +40,25 @@ app.post('/api/auth/login', async(req, res, next)=> {
   }
 });
 
-app.get('/api/auth/me', async(req, res, next)=> {
+app.post('/api/auth/register', async(req, res, next)=> {
   try {
-    res.send(await findUserWithToken(req.headers.authorization));
+    // res.send(await createAccount(req.body));
+    res.send(await createUser(req.body));
   }
   catch(ex){
     next(ex);
   }
 });
+
+app.get('/api/auth/me', isLoggedIn, (req, res, next)=> {
+  try {
+    res.send(req.user);
+  }
+  catch(ex){
+    next(ex);
+  }
+});
+
 
 app.get('/api/users', async(req, res, next)=> {
   try {
@@ -57,7 +78,7 @@ app.get('/api/users/:id/favorites', async(req, res, next)=> {
   }
 });
 
-app.post('/api/users/:id/favorites', async(req, res, next)=> {
+app.post('/api/users/:id/favorites', isLoggedIn, async(req, res, next)=> {
   try {
     res.status(201).send(await createFavorite({ user_id: req.params.id, product_id: req.body.product_id}));
   }
@@ -66,7 +87,7 @@ app.post('/api/users/:id/favorites', async(req, res, next)=> {
   }
 });
 
-app.delete('/api/users/:user_id/favorites/:id', async(req, res, next)=> {
+app.delete('/api/users/:user_id/favorites/:id', isLoggedIn, async(req, res, next)=> {
   try {
     await destroyFavorite({user_id: req.params.user_id, id: req.params.id });
     res.sendStatus(204);
@@ -119,4 +140,3 @@ const init = async()=> {
 };
 
 init();
-

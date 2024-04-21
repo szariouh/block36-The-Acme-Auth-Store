@@ -1,12 +1,64 @@
+body{
+  text-align: center;
+  background-color:rgba(197, 197, 197, 0.676)
+}
+
 form {
   display: flex;
   flex-direction: column;
+  width: 80%;
+  max-width: 460px;
+  margin: 20px auto;
 }
+
 
 form > * {
   margin: 0.5rem;
 }
 
-li.favorite {
-  border: solid 1px dodgerBlue;
+button{
+  border-radius: 3px;
+  border: 1.5px solid gray;
+  padding: 5px;
+  margin: 10px;
+}
+form button{
+  background-color: rgba(94, 180, 229, 0.662);
+}
+.add, .remove{
+  width: 60px;
+  background-color: rgba(131, 136, 135, 0.543);
+}
+ 
+.favorite {
+  border: solid 1px rgb(172, 205, 88);
+  background-color: rgba(38, 151, 129, 0.509);
+  width: 100%;
+}
+
+.least-favorite {
+  border: solid 1px rgb(100, 100, 100);
+  background-color: rgba(206, 116, 112, 0.5);
+  width: 100%;
+}
+
+.products{
+  border: 1.5px solid rgba(178, 178, 178, 0.603);
+  background-color: white;
+  width: 450px;
+  margin: 10px auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  list-style-type: none;
+  font-weight: bold;
+}
+
+.products li{
+  display: flex;
+  gap: 20px;
+}
+.products button{
+  width: 30px;
 }
